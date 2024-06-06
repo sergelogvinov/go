@@ -9,9 +9,11 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/ed25519"
+	"crypto/md5"
 	"crypto/rsa"
 	"crypto/subtle"
 	"crypto/x509"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"hash"
@@ -43,6 +45,11 @@ func (c *Conn) serverHandshake(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+
+	// Record JA3 fingerprint for TLS client
+	c.ja3Raw = clientHello.JA3String()
+	sum := md5.Sum([]byte(c.ja3Raw))
+	c.ja3Hash = hex.EncodeToString(sum[:])
 
 	if c.vers == VersionTLS13 {
 		hs := serverHandshakeStateTLS13{

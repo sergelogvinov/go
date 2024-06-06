@@ -250,6 +250,9 @@ type ConnectionState struct {
 	// TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_AES_128_GCM_SHA256).
 	CipherSuite uint16
 
+	JA3Raw  string // JA3 fingerprint string for TLS Client
+	JA3Hash string // JA3 fingerprint hash for TLS Client
+
 	// NegotiatedProtocol is the application protocol negotiated with ALPN.
 	NegotiatedProtocol string
 

@@ -97,6 +97,9 @@ type Conn struct {
 	// clientProtocol is the negotiated ALPN protocol.
 	clientProtocol string
 
+	ja3Raw  string // JA3 fingerprint string for TLS Client
+	ja3Hash string // JA3 fingerprint hash for TLS Client
+
 	// input/output
 	in, out   halfConn
 	rawInput  bytes.Buffer // raw input, starting with a record header
@@ -1611,6 +1614,8 @@ func (c *Conn) connectionStateLocked() ConnectionState {
 	state.NegotiatedProtocolIsMutual = true
 	state.ServerName = c.serverName
 	state.CipherSuite = c.cipherSuite
+	state.JA3Raw = c.ja3Raw
+	state.JA3Hash = c.ja3Hash
 	state.PeerCertificates = c.peerCertificates
 	state.VerifiedChains = c.verifiedChains
 	state.SignedCertificateTimestamps = c.scts
